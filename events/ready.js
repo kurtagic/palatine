@@ -6,7 +6,7 @@ module.exports = {
     execute(client) {
 
         // client.user.setUsername('palatine');
-        client.user.setAvatar(iconURL);
+        //client.user.setAvatar(iconURL);
         client.user.setPresence({
             activities: [{name: 'over the realm', type: ActivityType.Watching}],
             status: PresenceUpdateStatus.Idle
