@@ -12,62 +12,58 @@ module.exports = {
                 console.error(err.message);
                 return;
             }
-            console.log('Connected to the main database.');
         });
 
         const userID = message.author.id;
         const messageContentLength = message.content.length;
 
-        function getUser() {
-            return new Promise((resolve, reject) => {
-                db.get('SELECT * FROM experience_ranks WHERE user_id = ?', [userID], (err, row) => {
-                    if (err) {
-                        reject(err);
-                        return;
-                    }
-
-                    if (!row) {
-                        db.run('INSERT INTO experience_ranks (user_id, experience, level) VALUES (?, ?, ?)', [userID, 0, 1], function(err) {
-                            if (err) {
-                                reject(err);
-                                return;
-                            }
-
-                            resolve({ 0, 1 });
-                        });
-
-                        return;
-                    }
-
-                    resolve({ row.experience, row.level });
-                });
-            });
-        }
-
-        getUser().then(({ experience, level }) => {
+        getUser(db, userID).then(({ experience, level }) => {
                 const newExperience = experience + messageContentLength;
-                // Update the experience
+				
                 db.run('UPDATE experience_ranks SET experience = ? WHERE user_id = ?', [newExperience, userID], function(err) {
                     if (err) {
-                        console.error(err.message);
                         return;
                     }
 
                     message.channel.send(`experience: **${newExperience}**`);
                 });
             })
-            .catch(err => {
+			.catch(err => {
                 console.error(err.message);
             })
             .finally(() => {
-                // Close the database connection
                 db.close((err) => {
                     if (err) {
                         console.error(err.message);
                         return;
                     }
-                    console.log('Closed the database connection.');
                 });
             });
     },
 };
+
+function getUser(db, userID) {
+    return new Promise((resolve, reject) => {
+		db.get('SELECT * FROM experience_ranks WHERE user_id = ?', [userID], (err, row) => {
+			if (err) {
+				reject(err);
+				return;
+			}
+
+			if (!row) {
+				db.run('INSERT INTO experience_ranks (user_id, experience, level) VALUES (?, ?, ?)', [userID, 0, 1], function(err) {
+					if (err) {
+						reject(err);
+						return;
+					}
+
+					resolve({ experience: 0, level: 1 });
+				});
+
+				return;
+			}
+
+			resolve({ experience: row.experience, level: row.level });
+		});
+	});
+}
