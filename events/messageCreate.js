@@ -18,8 +18,7 @@ module.exports = {
         const userID = message.author.id;
         const messageContentLength = message.content.length;
 
-        // Function to handle user data and update experience
-        function handleUserData() {
+        function getUser() {
             return new Promise((resolve, reject) => {
                 db.get('SELECT * FROM experience_ranks WHERE user_id = ?', [userID], (err, row) => {
                     if (err) {
@@ -27,44 +26,34 @@ module.exports = {
                         return;
                     }
 
-                    let experience = 0;
-                    let level = 1;
-
                     if (!row) {
-                        console.log(`No user found with user_id = ${userID}. Creating a new user.`);
-                        db.run('INSERT INTO experience_ranks (user_id, experience, level) VALUES (?, ?, ?)', [userID, experience, level], function(err) {
+                        db.run('INSERT INTO experience_ranks (user_id, experience, level) VALUES (?, ?, ?)', [userID, 0, 1], function(err) {
                             if (err) {
                                 reject(err);
                                 return;
                             }
-                            console.log(`A new user has been created with user_id = ${userID}`);
-                            resolve({ experience, level });
+
+                            resolve({ 0, 1 });
                         });
-                    } else {
-                        console.log(row.experience);
-                        experience = row.experience;
-                        level = row.level;
-                        resolve({ experience, level });
+
+                        return;
                     }
+
+                    resolve({ row.experience, row.level });
                 });
             });
         }
 
-        // Handle the user data and update experience
-        handleUserData()
-            .then(({ experience, level }) => {
+        getUser().then(({ experience, level }) => {
                 const newExperience = experience + messageContentLength;
-                console.log(`Current experience: ${experience}`);
-                console.log(`Content length: ${messageContentLength}`);
-                console.log(`New experience: ${newExperience}`);
-
                 // Update the experience
                 db.run('UPDATE experience_ranks SET experience = ? WHERE user_id = ?', [newExperience, userID], function(err) {
                     if (err) {
                         console.error(err.message);
                         return;
                     }
-                    console.log(`Updated experience for user_id = ${userID} to ${newExperience}`);
+
+                    message.channel.send(`experience: **${newExperience}**`);
                 });
             })
             .catch(err => {
