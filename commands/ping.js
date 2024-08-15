@@ -28,7 +28,7 @@ module.exports = {
         interaction.editReply({embeds: [embed]});
     },
 };
-
+/*
 function pingDatabase() {
     return new Promise((resolve, reject) => {
         const startTime = Date.now();
@@ -40,5 +40,21 @@ function pingDatabase() {
 		const endTime = Date.now();
 		
 		resolve(endTime - startTime);
+    });
+}
+*/
+function pingDatabase() {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+		
+        const db = new sqlite3.Database("./db/main.db", sqlite3.OPEN_READ);
+
+        db.get('SELECT 1 AS result');		
+		db.close();
+		
+		const endTime = Date.now();
+		const duration = endTime - startTime;
+			
+		resolve(duration);
     });
 }
