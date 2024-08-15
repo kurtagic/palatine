@@ -15,7 +15,7 @@ module.exports = {
 
         const roundtripLatency = sent.createdTimestamp - interaction.createdTimestamp;
         const websocketHeartbeat = interaction.client.ws.ping;
-        const databasePing = pingDatabase();
+        const databasePing = await pingDatabase();
 
         const embed = new EmbedBuilder()
             .setTitle("PING")
