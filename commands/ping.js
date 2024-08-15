@@ -19,7 +19,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle("PING")
-            .setDescription(`Roundtrip latency: **${roundtripLatency}**ms\nWebsocket heartbeat: **${websocketHeartbeat}**ms\n\nDatabase latency: **${databasePing}**ms`)
+            .setDescription(`Roundtrip latency: **${roundtripLatency}**ms\nWebsocket heartbeat: **${websocketHeartbeat}**ms\nDatabase latency: **${databasePing}**ms`)
             .setThumbnail(iconURL)
             .setFooter({text: footer, iconURL: iconURL})
             .setTimestamp()
@@ -33,28 +33,12 @@ function pingDatabase() {
     return new Promise((resolve, reject) => {
         const startTime = Date.now();
 
-        const db = new sqlite3.Database("./db/main.db", (err) => {
-            if (err) {
-                reject(`Error opening database: ${err.message}`);
-                return;
-            }
-        });
-
-        db.get('SELECT 1 AS result', (err) => {
-            if (err) {
-                reject(`Error executing database query: ${err.message}`);
-                return;
-            }
-
-            db.close((err) => {
-                if (err) {
-                    reject(`Error closing database: ${err.message}`);
-                    return;
-                }
-
-                const endTime = Date.now();
-                resolve(endTime - startTime);
-            });
-        });
+        const db = new sqlite3.Database("./db/main.db");
+        db.get('SELECT 1 AS result');
+		db.close();
+		
+		const endTime = Date.now();
+		
+		resolve(endTime - startTime);
     });
 }
