@@ -13,10 +13,19 @@ module.exports = {
         const messageContentLength = message.content.length;
 
         getUser(db, userID).then(({ experience, level }) => {
-                const newExperience = experience + messageContentLength;
-				
-                db.run('UPDATE experience_ranks SET experience = ? WHERE user_id = ?', [newExperience, userID]);
-				message.channel.send(`experience: **${newExperience}**`);
+                experience += getRandomInteger(5, 15);
+
+                const experienceLimit = getNewExperienceNeeded(level);
+
+				if(experience >= experienceLimit)
+                {
+                    experience -= experienceLimit;
+                    level++;
+                    message.channel.send(`LEVEL UP!`);
+                }
+
+                db.run('UPDATE experience_ranks SET experience = ?, level = ? WHERE user_id = ?', [experience, level, userID]);
+				message.channel.send(`experience: **${experience}**\nlevel: **${level}**`);
 		})
 		.finally(() => {
 			db.close();
@@ -37,4 +46,16 @@ function getUser(db, userID) {
 			resolve({ experience: row.experience, level: row.level });
 		});
 	});
+}
+
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getNewExperienceNeeded(level) {
+    const base_xp = 50;
+    const newLevel = level + 1;
+    const factor = 2;
+
+    return base_xp * (newLevel ^ factor);
 }
