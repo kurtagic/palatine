@@ -9,6 +9,7 @@
   "author": "teo",
   "license": "ISC",
   "dependencies": {
+    "canvacord": "^6.0.2",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5"
   }
