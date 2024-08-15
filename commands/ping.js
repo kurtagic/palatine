@@ -33,7 +33,7 @@ function pingDatabase() {
     return new Promise((resolve, reject) => {
         const startTime = Date.now();
 
-        const db = new sqlite3.Database("./db/main.db");
+        const db = new sqlite3.Database("./db/main.db", sqlite3.OPEN_READ);
         db.get('SELECT 1 AS result');
 		db.close();
 		
