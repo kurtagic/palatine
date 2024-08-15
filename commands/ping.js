@@ -1,5 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder} = require("discord.js");
 const {color, footer, iconURL} = require("../config.json");
+const sqlite3 = require("sqlite3").verbose();
 
 module.exports = {
     data: new SlashCommandBuilder()
