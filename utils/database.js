@@ -1,7 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
 
 module.exports = {
-    pingDatabase: function () {
+    pingDatabase: function() {
         return new Promise((resolve, reject) => {
             const startTime = Date.now();
 
@@ -21,8 +21,7 @@ module.exports = {
             });
         });
     },
-
-    getUser: function (userID) {
+    getUser: function(userID) {
         return new Promise((resolve, reject) => {
             const db = new sqlite3.Database("./db/main.db");
 
@@ -38,11 +37,11 @@ module.exports = {
                         if (err) {
                             return reject(err);
                         }
-                        resolve({experience: 0, level: 1});
+                        resolve({ experience: 0, level: 1 });
                     });
                 } else {
                     db.close();
-                    resolve({experience: row.experience, level: row.level});
+                    resolve({ experience: row.experience, level: row.level });
                 }
             });
         });
