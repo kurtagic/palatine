@@ -16,8 +16,9 @@ module.exports = {
 async function handleCourtChannel(member, guild) {
     const name = member.nickname || member.user.globalName || member.user.username;
     const userCourtChannelName = `${name}'s court`;
-    const existingChannel = guild.channels.cache.find(channel => channel.parentId === ck3CourtsCategoryID && channel.name === userCourtChannelName && channel.type === ChannelType.GuildVoice);
 
+    // if in CK3 COURTS Category exists a voice channel with the name user's court
+    const existingChannel = guild.channels.cache.find(channel => channel.parentId === ck3CourtsCategoryID && channel.name === userCourtChannelName && channel.type === ChannelType.GuildVoice);
     if (existingChannel) {
         await existingChannel.delete();
         await member.voice.disconnect();
@@ -26,9 +27,7 @@ async function handleCourtChannel(member, guild) {
     }
 
     const newChannel = await guild.channels.create({
-        name: userCourtChannelName,
-        type: ChannelType.GuildVoice,
-        parent: ck3CourtsCategoryID,
+        name: userCourtChannelName, type: ChannelType.GuildVoice, parent: ck3CourtsCategoryID,
     });
 
     await member.voice.setChannel(newChannel);
