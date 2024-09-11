@@ -11,6 +11,7 @@
   "dependencies": {
     "canvacord": "^6.0.2",
     "discord.js": "^14.15.3",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "sqlite3": "^5.1.7"
   }
 }

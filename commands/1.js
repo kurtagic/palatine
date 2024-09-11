@@ -12,7 +12,6 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionsBitField.Administrator),
 
     async execute(interaction) {
-
         const embed = new EmbedBuilder()
             .setDescription(interaction.options.getString("content"))
             .setThumbnail(interaction.user.displayAvatarURL(interaction.user.avatar))
@@ -21,6 +20,5 @@ module.exports = {
             .setColor(color)
 
         interaction.reply({embeds: [embed]});
-
     },
 };

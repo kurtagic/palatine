@@ -1,6 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder} = require("discord.js");
 const {color, footer, iconURL} = require("../config.json");
-const sqlite3 = require("sqlite3").verbose();
+const {pingDatabase} = require("../utils/database.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -9,8 +9,7 @@ module.exports = {
 
     async execute(interaction) {
         const sent = await interaction.reply({
-            content: "Pinging...",
-            fetchReply: true,
+            content: "Pinging...", fetchReply: true,
         });
 
         const roundtripLatency = sent.createdTimestamp - interaction.createdTimestamp;
@@ -28,19 +27,3 @@ module.exports = {
         interaction.editReply({embeds: [embed]});
     },
 };
-
-function pingDatabase() {
-    return new Promise((resolve, reject) => {
-        const startTime = Date.now();
-		
-        const db = new sqlite3.Database("./db/main.db", sqlite3.OPEN_READ);
-
-        db.get('SELECT 1 AS result');		
-		db.close();
-		
-		const endTime = Date.now();
-		const duration = endTime - startTime;
-	
-		resolve(duration);
-    });
-}

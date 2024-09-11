@@ -16,6 +16,5 @@ module.exports = {
             .setColor(color)
 
         interaction.reply({embeds: [embed]});
-
     },
 };
