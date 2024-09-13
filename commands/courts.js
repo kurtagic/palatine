@@ -1,11 +1,11 @@
-const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField, ChannelType} = require("discord.js");
+const {SlashCommandBuilder, EmbedBuilder} = require("discord.js");
 const {color, footer} = require("../config.json");
-const {getCourts, getCourtHost} = require("../courts/utils");
+const {getCourts, getCourtHost} = require("../courts_utility/modules");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("courts")
-        .setDescription("view all courts in server"),
+        .setDescription("view all courts_utility in server"),
 
     async execute(interaction) {
         const courts = await getCourts(interaction.guild);

@@ -1,6 +1,6 @@
 const {Events} = require('discord.js');
-const {deleteDelay, defaultCourtName} = require("../courts/courts_config.json");
-const {getCourtChannel, shouldCourtBeDeleted, createCourt, isInCreateCourt} = require("../courts/utils");
+const {deleteDelay, defaultCourtName} = require("../courts_utility/courts_config.json");
+const {getCourtChannel, shouldCourtBeDeleted, createCourt, isInCreateCourt} = require("../courts_utility/modules");
 
 // if newState && !oldState ... joined channel
 // if !newSate && oldSate ... left channel
@@ -36,6 +36,7 @@ async function handleCourtDeletion(court) {
     const intervalTime = deleteDelay / 10;
 
     const interval = setInterval(async () => {
+
         // get current channel status (incase it got updated)
         const channel = court.guild.channels.cache.get(court.id);
 

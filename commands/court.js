@@ -1,7 +1,7 @@
 const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField, ChannelType} = require("discord.js");
 const {color, footer} = require("../config.json");
-const {formatTime} = require("../utils/helper.js");
-const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts/utils");
+const {formatTime} = require("../utility/modules.js");
+const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts_utility/modules");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -35,11 +35,11 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(`${court.name.toUpperCase()}`)
             .addFields(
-          {name: "Host", value: `${host.user}`, inline: true},
-                {name: "Guests", value: guests.size > 0 ? formattedGuests : "None", inline: true },
-                {name: "Time Active", value: formattedActiveTime, inline: true},
-                {name: "Join", value: `${court.url}`, inline: true},
-                {name: "Invite Link", value: `${invite}`, inline: true})
+          { name: "Host", value: `${host.user}`, inline: true },
+                { name: "Guests", value: guests.size > 0 ? formattedGuests : "None", inline: true },
+                { name: "Time Active", value: formattedActiveTime, inline: true },
+                { name: "Join", value: `${court.url}`, inline: true },
+                { name: "Invite Link", value: `${invite}`, inline: true })
             .setThumbnail(targetUser.user.displayAvatarURL({dynamic: true}))
             .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
             .setTimestamp()

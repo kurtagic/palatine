@@ -5,9 +5,7 @@ module.exports = {
 
         // client.user.setUsername(client.user.username);
         // client.user.setAvatar(client.user.avatarURL());
-        client.user.setPresence({
-            activities: [{name: "the Siren Song", type: ActivityType.Listening}], status: PresenceUpdateStatus.Idle
-        });
+        client.user.setPresence({ activities: [{name: "the Siren Song", type: ActivityType.Listening}], status: PresenceUpdateStatus.Idle });
 
         console.log(`launched ${client.user.tag}`);
     },

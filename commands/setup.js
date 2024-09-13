@@ -1,6 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 const {color, footer} = require("../config.json");
-const {initialise} = require("../courts/utils.js");
+const {initialise} = require("../courts_utility/modules.js");
 
 module.exports = {
     data: new SlashCommandBuilder()

@@ -66,9 +66,6 @@ module.exports = {
 
     getCourtGuests: async function (court) {
         const host = await module.exports.getCourtHost(court);
-        if (!host) {
-            return null;
-        }
         return court.members.filter(participant => participant !== host);
     },
 
