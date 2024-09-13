@@ -43,7 +43,7 @@ module.exports = {
             .setThumbnail(targetUser.user.displayAvatarURL({dynamic: true}))
             .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
             .setTimestamp()
-            .setColor(color);
+            .setColor(host.displayHexColor );
 
         interaction.reply({embeds: [embed]});
     }
