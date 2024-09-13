@@ -1,7 +1,12 @@
 const {REST, Routes} = require('discord.js');
-const {clientId, guildId, token} = require('./config.json');
+const {clientID, guildID} = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
+
+// Process Environment
+const dotenv = require("dotenv");
+dotenv.config();
+const TOKEN = process.env.TOKEN;
 
 const commands = [];
 
@@ -18,17 +23,13 @@ for (const file of commandFiles) {
     }
 }
 
-
-const rest = new REST().setToken(token);
+const rest = new REST().setToken(TOKEN);
 
 (async () => {
     try {
         console.log(`refreshing ${commands.length} application (/) commands...`);
 
-        const data = await rest.put(
-            Routes.applicationGuildCommands(clientId, guildId),
-            {body: commands},
-        );
+        const data = await rest.put(Routes.applicationGuildCommands(clientID, guildID), {body: commands},);
 
         console.log(`reloaded ${data.length} application (/) commands`);
     } catch (error) {

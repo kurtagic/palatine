@@ -1,0 +1,6 @@
+{
+  "courtsCategoryName": "COURTS",
+  "createCourtChannelName": "Create Court",
+  "deleteDelay": 300000,
+  "hostPermissions" : ["ViewChannel", "Connect", "Speak", "ManageChannels", "ManageRoles", "MuteMembers", "DeafenMembers", "MoveMembers", "ManageMessages"]
+}

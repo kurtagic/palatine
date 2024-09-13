@@ -1,34 +1,63 @@
-const {Events, ChannelType} = require("discord.js");
+const {Events, ChannelType} = require('discord.js');
+const {courtsCategoryName, createCourtChannelName, deleteDelay, hostPermissions} = require("../courts/courts_config.json");
+const {getCourtChannel, getCourtsCategory} = require("../courts/courts");
 
-const ck3CreateCourtChannelID = "1265445785085018123";
-const ck3CourtsCategoryID = "1265479048889634988";
+// if newState && !oldState ... joined channel
+// if !newSate && oldSate ... left channel
+// if newState && oldState && newState.channel.id !== oldState.channel.id ... moved channels
+// else ... stayed in channel
 
 module.exports = {
     name: Events.VoiceStateUpdate, once: false, async execute(oldState, newState) {
+        if (newState.channel && newState.channel.name === createCourtChannelName) {
+            await createOrMoveToCourt(newState.member, newState.guild);
+        }
 
-        // CK3 COURTS
-        if (newState.channelId === ck3CreateCourtChannelID) await handleCourtChannel(newState.member, newState.guild);
-        if (oldState.channel && oldState.channel.parentId === ck3CourtsCategoryID && oldState.channel.members.size === 0) await oldState.channel.delete();
-
+        if (shouldCourtBeDeleted(oldState)) {
+            await handleCourtDeletion(oldState);
+        }
     },
 };
 
-async function handleCourtChannel(member, guild) {
+async function createOrMoveToCourt(member, guild) {
     const name = member.nickname || member.user.globalName || member.user.username;
-    const userCourtChannelName = `${name}'s court`;
+    const courtName = `${name}'s court`;
 
-    // if in CK3 COURTS Category exists a voice channel with the name user's court
-    const existingChannel = guild.channels.cache.find(channel => channel.parentId === ck3CourtsCategoryID && channel.name === userCourtChannelName && channel.type === ChannelType.GuildVoice);
-    if (existingChannel) {
-        await existingChannel.delete();
-        await member.voice.disconnect();
+    const courtsCategory = await getCourtsCategory(guild);
+    let court = await getCourtChannel(member);
 
-        return;
+    if (!court) {
+        court = await guild.channels.create({
+            name: courtName, parent: courtsCategory.id, type: ChannelType.GuildVoice, permissionOverwrites: [{
+                id: member.id, allow: hostPermissions
+            }]
+        });
     }
 
-    const newChannel = await guild.channels.create({
-        name: userCourtChannelName, type: ChannelType.GuildVoice, parent: ck3CourtsCategoryID,
-    });
+    await member.voice.setChannel(court);
+}
 
-    await member.voice.setChannel(newChannel);
+function shouldCourtBeDeleted(oldState) {
+    return oldState.channel &&  oldState.channel.parent && oldState.channel.parent.name === courtsCategoryName &&
+        oldState.channel.name !== createCourtChannelName &&
+        oldState.channel.members.size === 0;
+}
+
+async function handleCourtDeletion(oldState) {
+    const courtId = oldState.channel.id;
+    const deleteTimestamp = Date.now() + deleteDelay;
+    const intervalTime = 5*1000;
+
+    const interval = setInterval(async () => {
+        const channel = oldState.guild.channels.cache.get(courtId);
+        if (!channel || channel.members.size > 0) {
+            clearInterval(interval);
+            return;
+        }
+
+        if (Date.now() >= deleteTimestamp) {
+            await channel.delete();
+            clearInterval(interval);
+        }
+    }, intervalTime);
 }

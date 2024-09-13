@@ -1,5 +1,5 @@
 const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField} = require("discord.js");
-const {color, footer, iconURL} = require("../config.json");
+const {color, footer} = require("../config.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,7 +15,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setDescription(interaction.options.getString("content"))
             .setThumbnail(interaction.user.displayAvatarURL(interaction.user.avatar))
-            .setFooter({text: footer, iconURL: iconURL})
+            .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
             .setTimestamp()
             .setColor(color)
 
