@@ -29,7 +29,8 @@ const rest = new REST().setToken(TOKEN);
     try {
         console.log(`refreshing ${commands.length} application (/) commands...`);
 
-        const data = await rest.put(Routes.applicationGuildCommands(clientID, guildID), {body: commands},);
+       // const data = await rest.put(Routes.applicationGuildCommands(clientID, guildID), {body: commands},); // guild register
+        const data = await rest.put(Routes.applicationCommands(clientID), { body: commands },); // global register
 
         console.log(`reloaded ${data.length} application (/) commands`);
     } catch (error) {
