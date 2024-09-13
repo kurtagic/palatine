@@ -28,7 +28,7 @@ async function formatCourts(courts) {
 
     for (const court of courts.values()) {
         const host = await getCourtHost(court);
-        formattedString += `**HOST:** ${host} **COURT:**${court.url}\n`;
+        formattedString += `**HOST:** ${host} **COURT:** ${court.url}\n`;
     }
 
     return formattedString;
