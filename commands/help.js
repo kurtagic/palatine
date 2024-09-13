@@ -8,6 +8,10 @@ module.exports = {
 
     async execute(interaction) {
 
+        if (!interaction.inGuild()) {
+            interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
+            return;
+        }
         const embed = new EmbedBuilder()
             .setTitle("HELP")
             .setDescription("`/setup` - admin only\n`/ping` - view latency\n`/court [user]` - view court\n`/courts` - view all courts in server\n\n [] = optional")

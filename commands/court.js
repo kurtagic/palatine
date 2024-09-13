@@ -15,7 +15,7 @@ module.exports = {
     async execute(interaction) {
 
         if (!interaction.inGuild()) {
-      //      interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
+           // interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
             return;
         }
 

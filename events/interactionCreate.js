@@ -12,6 +12,10 @@ module.exports = {
         }
 
         try {
+            if (!interaction.inGuild()) {
+                interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
+                return;
+            }
             await command.execute(interaction);
         } catch (error) {
             console.error(error);
