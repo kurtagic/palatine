@@ -1,6 +1,6 @@
 const {Events} = require('discord.js');
 const {deleteDelay, defaultCourtName} = require("../courts/courts_config.json");
-const {getCourtChannel, shouldCourtBeDeleted, createCourt, isInCreateCourt} = require("../courts/courts");
+const {getCourtChannel, shouldCourtBeDeleted, createCourt, isInCreateCourt} = require("../courts/utils");
 
 // if newState && !oldState ... joined channel
 // if !newSate && oldSate ... left channel

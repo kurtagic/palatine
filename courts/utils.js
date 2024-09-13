@@ -40,13 +40,22 @@ module.exports = {
         if (!courtsCategory) {
             return null;
         }
-        return member.guild.channels.cache.find(channel => channel.type === ChannelType.GuildVoice && channel.parentId === courtsCategory.id && channel.permissionOverwrites.resolve(member.id)?.allow.has(hostPermissions, true));
+        return member.guild.channels.cache.find(channel => channel.type === ChannelType.GuildVoice && channel.parentId === courtsCategory.id && channel.permissionOverwrites.resolve(member.id) && channel.permissionOverwrites.resolve(member.id).allow.has(hostPermissions, true));
     },
 
-    getCourtHost: function (court) {
-        for (const member of court.guild.members.cache.values()) {
-            const overwrite = court.permissionOverwrites.resolve(member.id);
+    getCourts: async function(guild) {
+        const courtsCategory = await module.exports.getCourtsCategory(guild);
+        if (!courtsCategory) {
+            return [];
+        }
 
+        return guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice && channel.parentId === courtsCategory.id && channel.name !== createCourtChannelName);
+    },
+
+    getCourtHost: async function (court) {
+        const members = await court.guild.members.fetch();
+        for (const member of members.values()) {
+            const overwrite = court.permissionOverwrites.resolve(member.id);
             if (overwrite && overwrite.allow.has(hostPermissions, true)) {
                 return member;
             }

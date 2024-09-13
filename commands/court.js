@@ -1,7 +1,7 @@
 const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField, ChannelType} = require("discord.js");
 const {color, footer} = require("../config.json");
 const {formatTime} = require("../utils/helper.js");
-const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts/courts");
+const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts/utils");
 
 module.exports = {
     data: new SlashCommandBuilder()

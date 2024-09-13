@@ -1,5 +1,6 @@
 const {SlashCommandBuilder, EmbedBuilder} = require("discord.js");
 const {color, footer} = require("../config.json");
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("ping")
