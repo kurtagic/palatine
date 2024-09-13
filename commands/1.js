@@ -1,4 +1,4 @@
-const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField} = require("discord.js");
+const {SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits} = require("discord.js");
 const {color, footer} = require("../config.json");
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
             .setName("content")
             .setDescription("message content")
             .setRequired(true))
-        .setDefaultMemberPermissions(PermissionsBitField.Administrator),
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
         const embed = new EmbedBuilder()

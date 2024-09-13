@@ -1,4 +1,4 @@
-const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField} = require("discord.js");
+const {SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 const {color, footer} = require("../config.json");
 const {initialise} = require("../courts/utils.js");
 
@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("setup")
         .setDescription("inital setup")
-        .setDefaultMemberPermissions(PermissionsBitField.Administrator),
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
     async execute(interaction) {
         const channels = await initialise(interaction.guild);
