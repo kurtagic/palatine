@@ -3,7 +3,7 @@ const {courtsCategoryName, createCourtChannelName, hostPermissions} = require(".
 
 module.exports = {
     initialise: async function (guild) {
-        let courts = module.exports.getCourtsCategory(guild)
+        let courts = await module.exports.getCourtsCategory(guild)
         if (!courts) {
             courts = guild.channels.create({
                 name: courtsCategoryName, type: ChannelType.GuildCategory
