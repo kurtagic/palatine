@@ -15,7 +15,7 @@ module.exports = {
         const websocketHeartbeat = interaction.client.ws.ping;
 
         const embed = new EmbedBuilder()
-            .setTitle("PING")
+            .setTitle("PING111")
             .setDescription(`Roundtrip latency: **${roundtripLatency}**ms\nWebsocket heartbeat: **${websocketHeartbeat}**ms`)
             .setThumbnail(interaction.client.user.avatarURL())
             .setFooter({text: footer})
