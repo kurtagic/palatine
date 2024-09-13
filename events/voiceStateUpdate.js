@@ -1,6 +1,6 @@
-const {Events, ChannelType} = require('discord.js');
-const {courtsCategoryName, createCourtChannelName, deleteDelay, hostPermissions} = require("../courts/courts_config.json");
-const {getCourtChannel, getCourtsCategory} = require("../courts/courts");
+const {Events} = require('discord.js');
+const {deleteDelay, defaultCourtName} = require("../courts/courts_config.json");
+const {getCourtChannel, shouldCourtBeDeleted, createCourt, isInCreateCourt} = require("../courts/courts");
 
 // if newState && !oldState ... joined channel
 // if !newSate && oldSate ... left channel
@@ -9,47 +9,36 @@ const {getCourtChannel, getCourtsCategory} = require("../courts/courts");
 
 module.exports = {
     name: Events.VoiceStateUpdate, once: false, async execute(oldState, newState) {
-        if (newState.channel && newState.channel.name === createCourtChannelName) {
-            await createOrMoveToCourt(newState.member, newState.guild);
+        if (isInCreateCourt(newState.channel)) {
+            await moveToCourt(newState.member);
         }
 
-        if (shouldCourtBeDeleted(oldState)) {
-            await handleCourtDeletion(oldState);
+        if (shouldCourtBeDeleted(oldState.channel)) {
+            await handleCourtDeletion(oldState.channel);
         }
     },
 };
 
-async function createOrMoveToCourt(member, guild) {
-    const name = member.nickname || member.user.globalName || member.user.username;
-    const courtName = `${name}'s court`;
-
-    const courtsCategory = await getCourtsCategory(guild);
+async function moveToCourt(member) {
     let court = await getCourtChannel(member);
 
     if (!court) {
-        court = await guild.channels.create({
-            name: courtName, parent: courtsCategory.id, type: ChannelType.GuildVoice, permissionOverwrites: [{
-                id: member.id, allow: hostPermissions
-            }]
-        });
+        const name = member.nickname || member.user.globalName || member.user.username;
+        const courtName = defaultCourtName.replace("{user}", name);
+        court = await createCourt(member, courtName);
     }
 
     await member.voice.setChannel(court);
 }
 
-function shouldCourtBeDeleted(oldState) {
-    return oldState.channel &&  oldState.channel.parent && oldState.channel.parent.name === courtsCategoryName &&
-        oldState.channel.name !== createCourtChannelName &&
-        oldState.channel.members.size === 0;
-}
-
-async function handleCourtDeletion(oldState) {
-    const courtId = oldState.channel.id;
+async function handleCourtDeletion(court) {
     const deleteTimestamp = Date.now() + deleteDelay;
-    const intervalTime = 5*1000;
+    const intervalTime = deleteDelay / 10;
 
     const interval = setInterval(async () => {
-        const channel = oldState.guild.channels.cache.get(courtId);
+        // get current channel status (incase it got updated)
+        const channel = court.guild.channels.cache.get(court.id);
+
         if (!channel || channel.members.size > 0) {
             clearInterval(interval);
             return;

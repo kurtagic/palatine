@@ -6,16 +6,11 @@ const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts/court
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("court")
-        .setDescription("court-related commands")
-
-        // View Court Subcommand
-        .addSubcommand(subcommand => subcommand
-            .setName("view")
-            .setDescription("view a user's court")
-            .addMentionableOption(option => option
-                .setName("target-user")
-                .setDescription("the user whose court you want to view")
-                .setRequired(false))),
+        .setDescription("view court")
+        .addMentionableOption(option => option
+            .setName("host")
+            .setDescription("view host's court")
+            .setRequired(false)),
 
     async execute(interaction) {
 
@@ -24,48 +19,41 @@ module.exports = {
             return;
         }
 
-        const subcommand = interaction.options.getSubcommand();
+        const mentionedUserID = interaction.options.get("host")?.value;
+        const targetUserID = mentionedUserID || interaction.member.id;
+        const targetUser = await interaction.guild.members.fetch(targetUserID);
 
-        if (subcommand === "view") {
-            viewSubcommand(interaction);
+        const court = await getCourtChannel(targetUser);
+
+        if (!court) {
+            interaction.reply({ content: "This user has no court.", ephemeral: true});
+            return;
         }
-    },
-};
 
-async function viewSubcommand(interaction) {
-    const mentionedUserID = interaction.options.get("target-user")?.value;
-    const targetUserID = mentionedUserID || interaction.member.id;
-    const targetUser = await interaction.guild.members.fetch(targetUserID);
+        const host = await getCourtHost(court);
+        const guests = await getCourtGuests(court);
+        const formattedGuests = formatGuests(guests);
 
-    const court = await getCourtChannel(targetUser);
+        const timeActive = Date.now() - court.createdTimestamp;
+        const formattedActiveTime = await formatTime(timeActive);
+        const invite = await court.createInvite();
 
-    if (!court) {
-        interaction.reply({ content: "This user has no court.", ephemeral: true});
-        return;
+        const embed = new EmbedBuilder()
+            .setTitle(`${court.name.toUpperCase()}`)
+            .addFields(
+          {name: "Host", value: `${host.user}`, inline: true},
+                {name: "Guests", value: guests.size > 0 ? formattedGuests : "None", inline: true },
+                {name: "Time Active", value: formattedActiveTime, inline: true},
+                {name: "Join", value: `${court.url}`, inline: true},
+                {name: "Invite Link", value: `${invite}`, inline: true})
+            .setThumbnail(targetUser.user.displayAvatarURL({dynamic: true}))
+            .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
+            .setTimestamp()
+            .setColor(color);
+
+        interaction.reply({embeds: [embed]});
     }
-
-    const host = await getCourtHost(court);
-    const guests = await getCourtGuests(court);
-    const formattedGuests = formatGuests(guests);
-
-    const timeActive = Date.now() - court.createdTimestamp;
-    const formattedActiveTime = await formatTime(timeActive);
-    const invite = await court.createInvite();
-
-    const embed = new EmbedBuilder()
-        .setTitle(`${court.name.toUpperCase()}`)
-        .setDescription(`join: ${court.url}`)
-        .addFields({name: "Host", value: `${host.user}`, inline: true},
-            {name: "Guests", value: guests.size > 0 ? formattedGuests : "None", inline: true },
-            {name: "Time Active", value: formattedActiveTime, inline: true},
-            {name: "Invite Link", value: `${invite}`})
-        .setThumbnail(targetUser.user.displayAvatarURL({dynamic: true}))
-        .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
-        .setTimestamp()
-        .setColor(color);
-
-    interaction.reply({embeds: [embed]});
-}
+};
 
 function formatGuests(guests) {
     let formattedString = "";
@@ -75,3 +63,4 @@ function formatGuests(guests) {
 
     return formattedString;
 }
+
