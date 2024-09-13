@@ -13,12 +13,6 @@ module.exports = {
             .setRequired(false)),
 
     async execute(interaction) {
-
-        if (!interaction.inGuild()) {
-           // interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
-            return;
-        }
-
         const mentionedUserID = interaction.options.get("host")?.value;
         const targetUserID = mentionedUserID || interaction.member.id;
         const targetUser = await interaction.guild.members.fetch(targetUserID);

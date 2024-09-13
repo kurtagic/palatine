@@ -12,11 +12,6 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionsBitField.Administrator),
 
     async execute(interaction) {
-        if (!interaction.inGuild()) {
-            interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
-            return;
-        }
-
         const embed = new EmbedBuilder()
             .setDescription(interaction.options.getString("content"))
             .setThumbnail(interaction.user.displayAvatarURL(interaction.user.avatar))

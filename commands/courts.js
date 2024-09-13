@@ -8,12 +8,6 @@ module.exports = {
         .setDescription("view all courts in server"),
 
     async execute(interaction) {
-
-        if (!interaction.inGuild()) {
-            interaction.reply({content: "You can only run this command inside a server.", ephemeral: true});
-            return;
-        }
-
         const courts = await getCourts(interaction.guild);
         const formattedCourts = await formatCourts(courts);
 

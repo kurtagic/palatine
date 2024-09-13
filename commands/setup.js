@@ -9,14 +9,7 @@ module.exports = {
         .setDefaultMemberPermissions(PermissionsBitField.Administrator),
 
     async execute(interaction) {
-
-        if (!interaction.inGuild()) {
-            interaction.reply({content: "You can only run this command inside a server.", ephemeral: true});
-            return;
-        }
-
         const channels = await initialise(interaction.guild);
-
         const embed = new EmbedBuilder()
             .setTitle("INITAL SETUP")
             .setDescription(`The setup is complete! The ${channels.courts.url} category and ${channels.createCourt.url} have been setup. do not edit them manually because that will break everything. Just leave them to the bot please and thank you.\n\nmore info: \`/help\``)
