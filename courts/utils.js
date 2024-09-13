@@ -5,7 +5,7 @@ module.exports = {
     initialise: async function (guild) {
         let courts = await module.exports.getCourtsCategory(guild)
         if (!courts) {
-            courts = guild.channels.create({
+            courts = await guild.channels.create({
                 name: courtsCategoryName, type: ChannelType.GuildCategory
             });
         }
