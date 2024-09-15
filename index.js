@@ -33,9 +33,7 @@ for (const file of commandFiles) {
         continue;
     }
 
-    console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-    );
+    console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 }
 
 // Event Handler

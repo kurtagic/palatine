@@ -18,8 +18,8 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle("PING")
             .setDescription(`Roundtrip latency: **${latency}**ms\nWebsocket heartbeat: **${heartbeat}**ms`)
-            .setThumbnail(interaction.client.user.avatarURL())
-            .setFooter({ text: footer })
+            .setThumbnail(interaction.client.user.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: footer, iconURL: interaction.client.user.avatarURL() })
             .setTimestamp()
             .setColor(color);
 

@@ -6,7 +6,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName("court")
         .setDescription("view court")
-        .addMentionableOption(option => option
+        .addUserOption(option => option
             .setName("host")
             .setDescription("view host's court")
             .setRequired(false)
