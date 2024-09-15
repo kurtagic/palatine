@@ -1,6 +1,6 @@
-const {SlashCommandBuilder, EmbedBuilder} = require("discord.js");
-const {color, footer} = require("../config.json");
-const {getCourts, getCourtHost} = require("../courts_utility/modules");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { color, footer } = require("../config.json");
+const { getCourts, getCourtHost } = require("../courts/modules");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,13 +14,13 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(`COURTS IN ${interaction.guild.name.toUpperCase()}`)
             .setDescription(formattedCourts)
-            .setThumbnail(interaction.guild.iconURL({dynamic: true}))
-            .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
+            .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+            .setFooter({ text: footer, iconURL: interaction.client.user.avatarURL() })
             .setTimestamp()
             .setColor(color);
 
-        interaction.reply({embeds: [embed]});
-    }
+        interaction.reply({ embeds: [embed] });
+    },
 };
 
 async function formatCourts(courts) {
@@ -33,5 +33,3 @@ async function formatCourts(courts) {
 
     return formattedString;
 }
-
-

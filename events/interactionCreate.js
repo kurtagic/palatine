@@ -1,7 +1,8 @@
-const {Events} = require("discord.js");
+const { Events } = require("discord.js");
 
 module.exports = {
-    name: Events.InteractionCreate, async execute(interaction) {
+    name: Events.InteractionCreate,
+    async execute(interaction) {
         if (!interaction.isChatInputCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);
@@ -13,7 +14,10 @@ module.exports = {
 
         try {
             if (!interaction.inGuild()) {
-                interaction.reply({ content: "You can only run this command inside a server.", ephemeral: true});
+                interaction.reply({
+                    content: "You can only run this command inside a server.",
+                    ephemeral: true,
+                });
                 return;
             }
             await command.execute(interaction);
@@ -21,11 +25,13 @@ module.exports = {
             console.error(error);
             if (interaction.replied || interaction.deferred) {
                 await interaction.followUp({
-                    content: "There was an error while executing this command!", ephemeral: true,
+                    content: "There was an error while executing this command!",
+                    ephemeral: true,
                 });
             } else {
                 await interaction.reply({
-                    content: "There was an error while executing this command!", ephemeral: true,
+                    content: "There was an error while executing this command!",
+                    ephemeral: true,
                 });
             }
         }

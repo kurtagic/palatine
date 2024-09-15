@@ -5,7 +5,7 @@ module.exports = {
         const hours = Math.floor((timeMS / (1000 * 60 * 60)) % 24);
         const days = Math.floor(timeMS / (1000 * 60 * 60 * 24));
 
-        let formattedTime = '';
+        let formattedTime = "";
         if (days > 0) {
             formattedTime += `${days}d `;
         }
@@ -19,5 +19,5 @@ module.exports = {
         formattedTime += `${seconds}sec `;
 
         return formattedTime;
-    }
+    },
 };

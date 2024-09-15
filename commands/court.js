@@ -1,16 +1,15 @@
-const {SlashCommandBuilder, EmbedBuilder, PermissionsBitField, ChannelType} = require("discord.js");
-const {color, footer} = require("../config.json");
-const {formatTime} = require("../utility/modules.js");
-const {getCourtChannel, getCourtHost, getCourtGuests} = require("../courts_utility/modules");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { color, footer } = require("../config.json");
+const { formatTime } = require("../utility/modules.js");
+const { getCourtChannel, getCourtHost, getCourtGuests } = require("../courts/modules.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("court")
         .setDescription("view court")
-        .addMentionableOption(option => option
-            .setName("host")
-            .setDescription("view host's court")
-            .setRequired(false)),
+        .addMentionableOption((option) =>
+            option.setName("host").setDescription("view host's court").setRequired(false)
+        ),
 
     async execute(interaction) {
         const mentionedUserID = interaction.options.get("host")?.value;
@@ -20,7 +19,7 @@ module.exports = {
         const court = await getCourtChannel(targetUser);
 
         if (!court) {
-            interaction.reply({ content: "This user has no court.", ephemeral: true});
+            interaction.reply({ content: "This user has no court.", ephemeral: true });
             return;
         }
 
@@ -35,18 +34,19 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle(`${court.name.toUpperCase()}`)
             .addFields(
-          { name: "Host", value: `${host.user}`, inline: true },
+                { name: "Host", value: `${host.user}`, inline: true },
                 { name: "Guests", value: guests.size > 0 ? formattedGuests : "None", inline: true },
                 { name: "Time Active", value: formattedActiveTime, inline: true },
                 { name: "Join", value: `${court.url}`, inline: true },
-                { name: "Invite Link", value: `${invite}`, inline: true })
-            .setThumbnail(targetUser.user.displayAvatarURL({dynamic: true}))
-            .setFooter({text: footer, iconURL: interaction.client.user.avatarURL()})
+                { name: "Invite Link", value: `${invite}`, inline: true }
+            )
+            .setThumbnail(targetUser.user.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: footer, iconURL: interaction.client.user.avatarURL() })
             .setTimestamp()
-            .setColor(host.displayHexColor );
+            .setColor(host.displayHexColor);
 
-        interaction.reply({embeds: [embed]});
-    }
+        interaction.reply({ embeds: [embed] });
+    },
 };
 
 function formatGuests(guests) {
@@ -57,4 +57,3 @@ function formatGuests(guests) {
 
     return formattedString;
 }
-
