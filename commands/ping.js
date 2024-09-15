@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { color, footer } = require("../config.json");
+const { embedCreator } = require("../utils/modules.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -18,11 +18,11 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setTitle("PING")
             .setDescription(`Roundtrip latency: **${latency}**ms\nWebsocket heartbeat: **${heartbeat}**ms`)
-            .setThumbnail(interaction.client.user.avatarURL())
-            .setFooter({ text: footer })
+            .setThumbnail(interaction.client.user.displayAvatarURL({ dynamic: true }))
+            .setFooter({ text: footer, iconURL: interaction.client.user.avatarURL() })
             .setTimestamp()
             .setColor(color);
 
-        interaction.editReply({ embeds: [embed] });
+        interaction.reply({ embeds: [embed] });
     },
 };
