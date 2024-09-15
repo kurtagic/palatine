@@ -9,7 +9,7 @@ module.exports = {
 
     async execute(interaction) {
         const courts = await getCourts(interaction.guild);
-        const formattedCourts = await formatCourts(courts);
+        const formattedCourts = formatCourts(courts);
 
         const embed = new EmbedBuilder()
             .setTitle(`COURTS IN ${interaction.guild.name.toUpperCase()}`)

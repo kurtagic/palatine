@@ -1,14 +1,15 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { color, footer } = require("../config.json");
-const { formatTime } = require("../utility/modules.js");
 const { getCourtChannel, getCourtHost, getCourtGuests } = require("../courts/modules.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("court")
         .setDescription("view court")
-        .addMentionableOption((option) =>
-            option.setName("host").setDescription("view host's court").setRequired(false)
+        .addMentionableOption(option => option
+            .setName("host")
+            .setDescription("view host's court")
+            .setRequired(false)
         ),
 
     async execute(interaction) {
@@ -43,7 +44,7 @@ module.exports = {
             .setThumbnail(targetUser.user.displayAvatarURL({ dynamic: true }))
             .setFooter({ text: footer, iconURL: interaction.client.user.avatarURL() })
             .setTimestamp()
-            .setColor(host.displayHexColor);
+            .setColor(color);
 
         interaction.reply({ embeds: [embed] });
     },
@@ -51,9 +52,29 @@ module.exports = {
 
 function formatGuests(guests) {
     let formattedString = "";
-    guests.forEach((guest) => {
-        formattedString += `${guest.user}\n`;
-    });
+    guests.forEach(guest => formattedString += `${guest.user}\n`);
 
     return formattedString;
+}
+
+function formatTime(timeMS) {
+    const seconds = Math.floor((timeMS / 1000) % 60);
+    const minutes = Math.floor((timeMS / (1000 * 60)) % 60);
+    const hours = Math.floor((timeMS / (1000 * 60 * 60)) % 24);
+    const days = Math.floor(timeMS / (1000 * 60 * 60 * 24));
+
+    let formattedTime = "";
+    if (days > 0) {
+        formattedTime += `${days}d `;
+    }
+    if (hours > 0 || days > 0) {
+        formattedTime += `${hours}h `;
+    }
+    if (minutes > 0 || hours > 0 || days > 0) {
+        formattedTime += `${minutes}mins `;
+    }
+
+    formattedTime += `${seconds}sec`;
+
+    return formattedTime;
 }

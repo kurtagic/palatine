@@ -1,17 +1,17 @@
 {
-    "courtsCategoryName": "COURTS",
-    "createCourtChannelName": "Create Court",
-    "deleteDelay": 180000,
-    "defaultCourtName": "{user}'s court",
-    "hostPermissions": [
-        "ViewChannel",
-        "Connect",
-        "Speak",
-        "ManageChannels",
-        "ManageRoles",
-        "MuteMembers",
-        "DeafenMembers",
-        "MoveMembers",
-        "ManageMessages"
-    ]
+  "courtsCategoryName": "COURTS",
+  "createCourtChannelName": "Create Court",
+  "deleteDelay": 180000,
+  "defaultCourtName": "{user}'s court",
+  "hostPermissions": [
+    "ViewChannel",
+    "Connect",
+    "Speak",
+    "ManageChannels",
+    "ManageRoles",
+    "MuteMembers",
+    "DeafenMembers",
+    "MoveMembers",
+    "ManageMessages"
+  ]
 }
