@@ -5,7 +5,7 @@ const {
     shouldCourtBeDeleted,
     createCourt,
     isInCreateCourt,
-} = require("../courts/modules");
+} = require("../courts/modules.js");
 
 // if newState && !oldState ... joined channel
 // if !newSate && oldSate ... left channel

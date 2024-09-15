@@ -11,11 +11,7 @@ module.exports = {
             });
         }
 
-        let createCourt = await guild.channels.cache.find((channel) => {
-            channel.type === ChannelType.GuildVoice &&
-                channel.parentId === courts.id &&
-                channel.name === createCourtChannelName;
-        });
+        let createCourt = await module.exports.getCreateCourtChannel(guild);
 
         if (!createCourt) {
             createCourt = await guild.channels.create({
@@ -47,7 +43,13 @@ module.exports = {
 
     getCourtsCategory: function (guild) {
         return guild.channels.cache.find((channel) => {
-            channel.type === ChannelType.GuildCategory && channel.name === courtsCategoryName;
+            return channel.type === ChannelType.GuildCategory && channel.name === courtsCategoryName;
+        });
+    },
+
+    getCreateCourtChannel: function (guild) {
+        return guild.channels.cache.find((channel) => {
+            return channel.type === ChannelType.GuildVoice && channel.name === createCourtChannelName;
         });
     },
 
@@ -58,7 +60,7 @@ module.exports = {
         }
 
         return member.guild.channels.cache.find((channel) => {
-            channel.type === ChannelType.GuildVoice &&
+            return channel.type === ChannelType.GuildVoice &&
                 channel.parentId === courtsCategory.id &&
                 channel.permissionOverwrites.resolve(member.id) &&
                 channel.permissionOverwrites.resolve(member.id).allow.has(hostPermissions, true);
@@ -72,7 +74,7 @@ module.exports = {
         }
 
         return guild.channels.cache.filter((channel) => {
-            channel.type === ChannelType.GuildVoice &&
+            return channel.type === ChannelType.GuildVoice &&
                 channel.parentId === courtsCategory.id &&
                 channel.name !== createCourtChannelName;
         });
