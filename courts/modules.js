@@ -42,15 +42,11 @@ module.exports = {
     },
 
     getCourtsCategory: function (guild) {
-        return guild.channels.cache.find((channel) => {
-            return channel.type === ChannelType.GuildCategory && channel.name === courtsCategoryName;
-        });
+        return guild.channels.cache.find(channel => channel.type === ChannelType.GuildCategory && channel.name === courtsCategoryName);
     },
 
     getCreateCourtChannel: function (guild) {
-        return guild.channels.cache.find((channel) => {
-            return channel.type === ChannelType.GuildVoice && channel.name === createCourtChannelName;
-        });
+        return guild.channels.cache.find(channel => channel.type === ChannelType.GuildVoice && channel.name === createCourtChannelName);
     },
 
     getCourtChannel: async function (member) {
@@ -59,12 +55,12 @@ module.exports = {
             return null;
         }
 
-        return member.guild.channels.cache.find((channel) => {
-            return channel.type === ChannelType.GuildVoice &&
-                channel.parentId === courtsCategory.id &&
-                channel.permissionOverwrites.resolve(member.id) &&
-                channel.permissionOverwrites.resolve(member.id).allow.has(hostPermissions, true);
-        });
+        return member.guild.channels.cache.find(channel =>
+            channel.type === ChannelType.GuildVoice &&
+            channel.parentId === courtsCategory.id &&
+            channel.permissionOverwrites.resolve(member.id) &&
+            channel.permissionOverwrites.resolve(member.id).allow.has(hostPermissions, true)
+        );
     },
 
     getCourts: async function (guild) {
@@ -73,11 +69,11 @@ module.exports = {
             return [];
         }
 
-        return guild.channels.cache.filter((channel) => {
-            return channel.type === ChannelType.GuildVoice &&
-                channel.parentId === courtsCategory.id &&
-                channel.name !== createCourtChannelName;
-        });
+        return guild.channels.cache.filter(channel =>
+            channel.type === ChannelType.GuildVoice &&
+            channel.parentId === courtsCategory.id &&
+            channel.name !== createCourtChannelName
+        );
     },
 
     getCourtHost: async function (channel) {

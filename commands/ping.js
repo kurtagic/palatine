@@ -2,7 +2,9 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { color, footer } = require("../config.json");
 
 module.exports = {
-    data: new SlashCommandBuilder().setName("ping").setDescription("get latency"),
+    data: new SlashCommandBuilder()
+        .setName("ping")
+        .setDescription("get latency"),
 
     async execute(interaction) {
         const sent = await interaction.reply({
@@ -15,9 +17,7 @@ module.exports = {
 
         const embed = new EmbedBuilder()
             .setTitle("PING")
-            .setDescription(
-                `Roundtrip latency: **${latency}**ms\nWebsocket heartbeat: **${heartbeat}**ms`
-            )
+            .setDescription(`Roundtrip latency: **${latency}**ms\nWebsocket heartbeat: **${heartbeat}**ms`)
             .setThumbnail(interaction.client.user.avatarURL())
             .setFooter({ text: footer })
             .setTimestamp()
