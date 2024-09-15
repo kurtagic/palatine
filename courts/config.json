@@ -1,7 +1,7 @@
 {
     "courtsCategoryName": "COURTS",
     "createCourtChannelName": "Create Court",
-    "deleteDelay": 300000,
+    "deleteDelay": 180000,
     "defaultCourtName": "{user}'s court",
     "hostPermissions": [
         "ViewChannel",
