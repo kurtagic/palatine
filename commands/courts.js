@@ -5,7 +5,7 @@ const { getCourts, getCourtHost } = require("../courts/modules");
 module.exports = {
     data: new SlashCommandBuilder()
         .setName("courts")
-        .setDescription("view all courts_utility in server"),
+        .setDescription("view all courts in server"),
 
     async execute(interaction) {
         const courts = await getCourts(interaction.guild);

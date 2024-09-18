@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const { embedCreator } = require("../utils/modules.js");
+const { color, footer } = require("../config.json");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,6 +23,6 @@ module.exports = {
             .setTimestamp()
             .setColor(color);
 
-        interaction.reply({ embeds: [embed] });
+        interaction.editReply({ embeds: [embed] });
     },
 };
